@@ -14,6 +14,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
     implementation("dev.dejvokep:boosted-yaml-spigot:1.5")
+    implementation("org.xerial:sqlite-jdbc:3.53.2.0")
     implementation(kotlin("stdlib-jdk8"))
 }
 
@@ -21,6 +22,7 @@ tasks.shadowJar {
     dependencies {
         include(dependency("dev.dejvokep:boosted-yaml:1.3.7"))
         include(dependency("dev.dejvokep:boosted-yaml-spigot:1.5"))
+        include(dependency("org.xerial:sqlite-jdbc:3.53.2.0"))
     }
 
     // Relocates the packages to prevent conflicts

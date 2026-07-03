@@ -4,8 +4,10 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.drappula.arcadeCore.commands.MainCommand;
 import org.drappula.arcadeCore.config.DataConfig;
+import org.drappula.arcadeCore.database.Database;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public final class ArcadeCore extends JavaPlugin {
     private static ArcadeCore instance;
@@ -23,6 +25,13 @@ public final class ArcadeCore extends JavaPlugin {
             throw new RuntimeException(e);
         }
 
+        try {
+            Database.connect();
+        } catch (SQLException e) {
+            getLogger().severe("Failed to connect to database:");
+            throw new RuntimeException(e);
+        }
+
         registerCommands();
     }
 
@@ -34,6 +43,10 @@ public final class ArcadeCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        try {
+            Database.disconnect();
+        } catch (SQLException e) {
+            getLogger().severe("Failed to close database connection:");
+        }
     }
 }
