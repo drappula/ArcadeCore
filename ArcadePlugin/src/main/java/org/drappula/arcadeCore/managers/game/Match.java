@@ -2,19 +2,22 @@ package org.drappula.arcadeCore.managers.game;
 
 import org.bukkit.entity.Player;
 import org.drappula.arcadeApi.systems.game.GameState;
-import org.drappula.arcadeApi.systems.game.IGame;
+import org.drappula.arcadeApi.systems.game.IGameType;
+import org.drappula.arcadeApi.systems.game.IMatch;
 import org.drappula.arcadeApi.systems.game.IParticipant;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game implements IGame {
+public class Match implements IMatch {
     private GameState state = GameState.LOADING;
+    private final IGameType gameType;
     private final List<IParticipant> participants = new ArrayList<>();
     private final List<IParticipant> eliminatedParticipants = new ArrayList<>();
     private List<IParticipant> winnerParticipants = new ArrayList<>();
 
-    public Game(List<Player> players) {
+    public Match(IGameType gameType, List<Player> players) {
+        this.gameType = gameType;
         for (Player player : players) {
             participants.add(new Participant(player, this));
         }
@@ -25,6 +28,9 @@ public class Game implements IGame {
     }
     public void setState(GameState state) {
         this.state = state;
+    }
+    public IGameType getGameType() {
+        return gameType;
     }
     public List<IParticipant> getParticipants() {
         return participants;

@@ -8,5 +8,5 @@ public interface IParticipant {
     public Player getPlayer();
     public IProfile getProfile();
     public UserData getUserData();
-    public IGame getGame();
+    public IMatch getGame();
 }

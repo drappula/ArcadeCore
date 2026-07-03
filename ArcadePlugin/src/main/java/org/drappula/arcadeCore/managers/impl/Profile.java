@@ -3,12 +3,12 @@ package org.drappula.arcadeCore.managers.impl;
 import org.bukkit.entity.Player;
 import org.drappula.arcadeApi.database.UserData;
 import org.drappula.arcadeApi.systems.IProfile;
-import org.drappula.arcadeApi.systems.game.IGame;
+import org.drappula.arcadeApi.systems.game.IMatch;
 import org.drappula.arcadeCore.managers.UserDataManager;
 
 public class Profile implements IProfile {
     private final Player player;
-    private IGame game;
+    private IMatch game;
 
     public Profile(Player player) {
         this.player = player;
@@ -25,7 +25,7 @@ public class Profile implements IProfile {
     }
 
     @Override
-    public IGame getGame() {
+    public IMatch getGame() {
         return game;
     }
 }
