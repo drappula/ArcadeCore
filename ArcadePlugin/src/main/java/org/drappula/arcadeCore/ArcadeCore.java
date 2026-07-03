@@ -10,7 +10,6 @@ import org.drappula.arcadeCore.config.DataConfig;
 import org.drappula.arcadeCore.config.MainConfig;
 import org.drappula.arcadeCore.database.Database;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 public final class ArcadeCore extends JavaPlugin {
@@ -22,13 +21,8 @@ public final class ArcadeCore extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        try {
-            DataConfig.setup();
-            MainConfig.setup();
-        } catch (IOException e) {
-            getLogger().severe("Failed to initialize data.yml config file:");
-            throw new RuntimeException(e);
-        }
+        DataConfig.setup();
+        MainConfig.setup();
 
         try {
             Database.connect();
