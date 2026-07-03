@@ -2,6 +2,9 @@ package org.drappula.arcadeCore;
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.drappula.arcadeApi.ArcadeAPI;
+import org.drappula.arcadeApi.ArcadeAPIProvider;
+import org.drappula.arcadeCore.api.ArcadeAPIImpl;
 import org.drappula.arcadeCore.commands.MainCommand;
 import org.drappula.arcadeCore.config.DataConfig;
 import org.drappula.arcadeCore.config.MainConfig;
@@ -35,10 +38,15 @@ public final class ArcadeCore extends JavaPlugin {
         }
 
         registerCommands();
+        registerAPI();
     }
 
     private void registerCommands() {
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> commands.registrar().register(MainCommand.get()));
+    }
+    private void registerAPI() {
+        ArcadeAPI impl = new ArcadeAPIImpl();
+        ArcadeAPIProvider.register(impl);
     }
 
     @Override

@@ -14,12 +14,25 @@ public class Database {
         ArcadeCore.get().getDataFolder().mkdirs();
         connection = DriverManager.getConnection(
                 "jdbc:sqlite:" + ArcadeCore.get().getDataFolder().getAbsolutePath() + "/database.db");
+        try (Statement pragmaStmt = connection.createStatement()) {
+            pragmaStmt.execute("PRAGMA foreign_keys = ON;");
+        }
         try (Statement stmt = connection.createStatement()) {
             stmt.execute("CREATE TABLE IF NOT EXISTS user_profiles (" +
                     "uuid TEXT PRIMARY KEY, " +
-                    "username TEXT NOT NULL, " +
-                    "first_joined INTEGER NOT NULL, " +
-                    "last_joined INTEGER NOT NULL)");
+                    "username TEXT NOT NULL)");
+            stmt.execute("CREATE TABLE IF NOT EXISTS games (" +
+                    "game_id TEXT PRIMARY KEY)");
+            stmt.execute("CREATE TABLE IF NOT EXISTS game_stats (" +
+                    "uuid TEXT, " +
+                    "game_id TEXT, " +
+                    "points INT, " +
+                    "wins INT, " +
+                    "losses INT, " +
+                    "other_stats JSON, " +
+                    "PRIMARY KEY (uuid, game_id), " +
+                    "FOREIGN KEY (uuid) REFERENCES user_profiles(uuid) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (game_id) REFERENCES games(game_id) ON DELETE CASCADE)");
         }
     }
 
@@ -28,7 +41,7 @@ public class Database {
     }
 
     public static void disconnect() throws SQLException {
-        if (connection != null) {
+        if (connection != null && !connection.isClosed()) {
             connection.close();
         }
     }

@@ -2,7 +2,6 @@ package org.drappula.arcadeCore.listeners;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.event.EventHandler;

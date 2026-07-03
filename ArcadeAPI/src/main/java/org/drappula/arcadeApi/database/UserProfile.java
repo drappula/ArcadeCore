@@ -1,4 +1,4 @@
-package org.drappula.arcadeCore.database;
+package org.drappula.arcadeApi.database;
 
 import java.util.UUID;
 

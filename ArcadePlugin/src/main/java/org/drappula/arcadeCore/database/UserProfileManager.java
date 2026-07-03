@@ -1,5 +1,7 @@
 package org.drappula.arcadeCore.database;
 
+import org.drappula.arcadeApi.database.UserProfile;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
