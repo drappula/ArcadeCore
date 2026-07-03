@@ -5,14 +5,10 @@ import java.util.UUID;
 public class UserProfile {
     private final UUID uuid;
     private String username;
-    private final long firstJoined;
-    private long lastJoined;
 
-    public UserProfile(UUID uuid, String username, long firstJoined, long lastJoined) {
+    public UserProfile(UUID uuid, String username) {
         this.uuid = uuid;
         this.username = username;
-        this.firstJoined = firstJoined;
-        this.lastJoined = lastJoined;
     }
 
     public UUID getUuid() {
@@ -25,17 +21,5 @@ public class UserProfile {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public long getFirstJoined() {
-        return firstJoined;
-    }
-
-    public long getLastJoined() {
-        return lastJoined;
-    }
-
-    public void setLastJoined(long lastJoined) {
-        this.lastJoined = lastJoined;
     }
 }
