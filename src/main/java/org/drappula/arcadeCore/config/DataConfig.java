@@ -18,7 +18,7 @@ public class DataConfig {
     public static YamlDocument get() {
         return config;
     }
-    public DataConfig() throws IOException {
+    public static void setup() throws IOException {
         config = YamlDocument.create(
                 new File(ArcadeCore.get().getDataFolder(), "data.yml"), Objects.requireNonNull(ArcadeCore.get().getResource("data.yml")),
                 GeneralSettings.builder().setSerializer(SpigotSerializer.getInstance()).build(),
