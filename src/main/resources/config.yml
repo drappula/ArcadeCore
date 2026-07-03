@@ -1,0 +1,5 @@
+# set the lobby using
+lobby:
+  # Whether the player should be teleported to spawn on join or not
+  teleport-spawn: true
+  gamemode: ADVENTURE
