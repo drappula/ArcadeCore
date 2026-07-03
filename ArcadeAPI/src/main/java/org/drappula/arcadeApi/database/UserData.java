@@ -2,11 +2,11 @@ package org.drappula.arcadeApi.database;
 
 import java.util.UUID;
 
-public class UserProfile {
+public class UserData {
     private final UUID uuid;
     private String username;
 
-    public UserProfile(UUID uuid, String username) {
+    public UserData(UUID uuid, String username) {
         this.uuid = uuid;
         this.username = username;
     }

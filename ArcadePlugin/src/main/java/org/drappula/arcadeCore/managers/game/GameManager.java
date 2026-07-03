@@ -1,0 +1,22 @@
+package org.drappula.arcadeCore.managers.game;
+
+import org.drappula.arcadeApi.systems.game.IGame;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class GameManager {
+    private static final List<IGame> games = new ArrayList<>();
+
+    public static List<IGame> getGames() {
+        return games;
+    }
+
+    public static void addGame(IGame game) {
+        games.add(game);
+    }
+
+    public static void removeGame(IGame game) {
+        games.remove(game);
+    }
+}
