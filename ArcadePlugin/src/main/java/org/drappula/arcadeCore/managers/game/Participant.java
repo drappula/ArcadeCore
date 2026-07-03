@@ -10,9 +10,11 @@ import org.drappula.arcadeCore.managers.UserDataManager;
 
 public class Participant implements IParticipant {
     private final Player player;
+    private final IGame game;
 
-    public Participant(Player player) {
+    public Participant(Player player, IGame game) {
         this.player = player;
+        this.game = game;
     }
 
     @Override
@@ -32,6 +34,6 @@ public class Participant implements IParticipant {
 
     @Override
     public IGame getGame() {
-        return null;
+        return game;
     }
 }

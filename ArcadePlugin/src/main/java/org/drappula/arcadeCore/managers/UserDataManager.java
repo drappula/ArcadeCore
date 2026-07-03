@@ -45,7 +45,7 @@ public class UserDataManager {
 
     public static void save(UserData profile) throws SQLException {
         try (PreparedStatement stmt = Database.get().prepareStatement(
-                "INSERT INTO user_profiles (uuid, username) VALUES (?, ?, ?, ?) " +
+                "INSERT INTO user_profiles (uuid, username) VALUES (?, ?) " +
                         "ON CONFLICT(uuid) DO UPDATE SET username = excluded.username")) {
             stmt.setString(1, profile.getUuid().toString());
             stmt.setString(2, profile.getUsername());

@@ -21,7 +21,7 @@ public class Profile implements IProfile {
 
     @Override
     public Player getPlayer() {
-        return null;
+        return player;
     }
 
     @Override
