@@ -1,20 +1,16 @@
 # CLAUDE.md
-
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project overview
-
 ArcadeCore is a Paper/Spigot Minecraft plugin (group `org.drappula`, plugin main class `org.drappula.arcadeCore.ArcadeCore`) providing core lobby/arcade-server functionality (target: Paper 1.21.11).
 
 ## Build & run commands
-
 - `./gradlew build` — compiles and produces the shadowed plugin jar (shadowJar runs as part of `build`).
 - `./gradlew shadowJar` — build the relocated, dependency-bundled jar directly (output in `build/libs`).
 - `./gradlew runServer` — launches a local Paper 1.21.11 test server with the plugin installed (via `xyz.jpenilla.run-paper`); use this for manual in-game testing. Server heap is set to `-Xms2G -Xmx2G`.
 - There is no test suite configured in this project.
 
 ## Architecture
-
 - **Language/toolchain**: Java 21 and Kotlin (`kotlin("jvm")` plugin applied, targeting JVM 21), built with Gradle Kotlin DSL.
 - **Shadow/relocation**: `com.gradleup.shadow` bundles and relocates `dev.dejvokep:boosted-yaml` (both the core and spigot-serializer artifacts) under `me.plugin.libs` to avoid classpath conflicts with other plugins on the same server (see `build.gradle.kts` `shadowJar` block).
 - **Plugin entry point**: `ArcadeCore` (`src/main/java/org/drappula/arcadeCore/ArcadeCore.java`) is a singleton accessible via `ArcadeCore.get()`. `onEnable()` initializes `DataConfig` and registers commands through the lifecycle event `LifecycleEvents.COMMANDS` using the Brigadier-based command API (`Commands.registrar()`), not the legacy `plugin.yml` commands map — there is no `plugin.yml`, only `paper-plugin.yml`.
