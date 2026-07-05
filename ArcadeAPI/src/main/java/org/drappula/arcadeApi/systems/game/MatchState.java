@@ -1,6 +1,6 @@
 package org.drappula.arcadeApi.systems.game;
 
-public enum GameState {
+public enum MatchState {
     LOADING,
     STARTING,
     STARTED,
