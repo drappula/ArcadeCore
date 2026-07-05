@@ -72,9 +72,8 @@ public class MatchManager implements IMatchManager {
         participant.getPlayer().setGameMode(settings.getGameMode() == EndGameMode.DEFAULT ? defaultGameMode : settings.getGameMode().getGameMode());
         participant.getPlayer().setFlying(settings.isFlyEnabled() == EndFlyEnabled.DEFAULT ? defaultFlyEnabled : (settings.isFlyEnabled() == EndFlyEnabled.TRUE));
 
-        TagResolver eliminated = TagResolver.resolver(Placeholder.unparsed("participant", participant.getPlayer().getName()));
         for (IParticipant remaining : participant.getMatch().getParticipants()) {
-            MessageUtil.sendMessage(remaining.getPlayer(), MessagesConfig.get().getString("participant-eliminated"), eliminated);
+            MessageUtil.sendMessage(remaining.getPlayer(), MessagesConfig.get().getString("participant-eliminated"), Placeholder.unparsed("participant", participant.getPlayer().getName()));
         }
     }
 }

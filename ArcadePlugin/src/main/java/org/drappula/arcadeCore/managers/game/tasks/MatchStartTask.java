@@ -27,10 +27,9 @@ public class MatchStartTask extends BukkitRunnable {
             this.cancel();
             return;
         }
-        TagResolver time = TagResolver.resolver(Placeholder.unparsed("time", String.valueOf((int) timeLeft)));
         for (IParticipant participant : match.getParticipants()) {
             MessageUtil.sendMessage(participant.getPlayer(),
-                    MessagesConfig.get().getString("countdown-message-" + (timeLeft == 1 ? "singular" : "plural")), time);
+                    MessagesConfig.get().getString("countdown-message-" + (timeLeft == 1 ? "singular" : "plural")), Placeholder.unparsed("time", String.valueOf((int) timeLeft)));
         }
         timeLeft--;
     }
