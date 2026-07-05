@@ -10,6 +10,8 @@ import org.drappula.arcadeCore.config.DataConfig;
 import org.drappula.arcadeCore.config.MainConfig;
 import org.drappula.arcadeCore.config.MessagesConfig;
 import org.drappula.arcadeCore.database.Database;
+import org.drappula.arcadeCore.listeners.LobbyListener;
+import org.drappula.arcadeCore.managers.game.GameManager;
 
 import java.sql.SQLException;
 
@@ -26,6 +28,7 @@ public final class ArcadeCore extends JavaPlugin {
         setupConfig();
         connectDatabase();
         registerCommands();
+        registerListeners();
         registerAPI();
     }
     private void setupConfig() {
@@ -44,6 +47,9 @@ public final class ArcadeCore extends JavaPlugin {
     private void registerCommands() {
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> commands.registrar().register(MainCommand.get()));
     }
+    private void registerListeners() {
+        getServer().getPluginManager().registerEvents(new LobbyListener(), this);
+    }
     private void registerAPI() {
         ArcadeAPI impl = new ArcadeAPIImpl();
         ArcadeAPIProvider.register(impl);
@@ -51,6 +57,7 @@ public final class ArcadeCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        GameManager.get().reload();
         try {
             Database.disconnect();
         } catch (SQLException e) {

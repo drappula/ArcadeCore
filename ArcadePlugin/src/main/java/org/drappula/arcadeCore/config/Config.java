@@ -11,18 +11,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Config {
-    private static String fileName;
-    public Config(String configFileName) {
-        fileName = configFileName;
+public abstract class Config {
+    private final String fileName;
+    private YamlDocument document;
+
+    protected Config(String fileName) {
+        this.fileName = fileName;
     }
-    public static YamlDocument config;
-    public static YamlDocument get() {
-        return config;
+
+    protected YamlDocument getDocument() {
+        return document;
     }
-    public static void setup() {
+
+    protected void load() {
         try {
-            config = YamlDocument.create(
+            document = YamlDocument.create(
                     new File(ArcadeCore.get().getDataFolder(), fileName), Objects.requireNonNull(ArcadeCore.get().getResource(fileName)),
                     GeneralSettings.builder().setSerializer(SpigotSerializer.getInstance()).build(),
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build()

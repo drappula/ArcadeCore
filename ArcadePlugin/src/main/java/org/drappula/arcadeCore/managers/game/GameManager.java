@@ -57,7 +57,7 @@ public class GameManager implements IGameManager {
         matches.get(gameId).remove(match);
         participants.get(gameId).removeAll(match.getParticipants());
     }
-    public void reload() { // TODO: use it
+    public void reload() {
         games = new HashMap<>();
         matches = new HashMap<>();
         participants = new HashMap<>();

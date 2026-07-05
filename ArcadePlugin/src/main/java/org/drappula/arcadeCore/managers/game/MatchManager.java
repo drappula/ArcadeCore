@@ -1,5 +1,7 @@
 package org.drappula.arcadeCore.managers.game;
 
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.drappula.arcadeApi.events.MatchEndEvent;
@@ -10,8 +12,10 @@ import org.drappula.arcadeApi.systems.game.settings.EndGameMode;
 import org.drappula.arcadeApi.systems.game.settings.GameEndSettings;
 import org.drappula.arcadeCore.ArcadeCore;
 import org.drappula.arcadeCore.config.MainConfig;
+import org.drappula.arcadeCore.config.MessagesConfig;
 import org.drappula.arcadeCore.managers.game.tasks.MatchEndTask;
 import org.drappula.arcadeCore.managers.game.tasks.MatchStartTask;
+import org.drappula.arcadeCore.util.MessageUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -67,5 +71,10 @@ public class MatchManager implements IMatchManager {
         boolean defaultFlyEnabled = MainConfig.get().getBoolean("match.end.fly-enabled");
         participant.getPlayer().setGameMode(settings.getGameMode() == EndGameMode.DEFAULT ? defaultGameMode : settings.getGameMode().getGameMode());
         participant.getPlayer().setFlying(settings.isFlyEnabled() == EndFlyEnabled.DEFAULT ? defaultFlyEnabled : (settings.isFlyEnabled() == EndFlyEnabled.TRUE));
+
+        TagResolver eliminated = TagResolver.resolver(Placeholder.unparsed("participant", participant.getPlayer().getName()));
+        for (IParticipant remaining : participant.getMatch().getParticipants()) {
+            MessageUtil.sendMessage(remaining.getPlayer(), MessagesConfig.get().getString("participant-eliminated"), eliminated);
+        }
     }
 }

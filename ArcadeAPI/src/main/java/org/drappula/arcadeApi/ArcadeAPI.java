@@ -6,6 +6,7 @@ import org.drappula.arcadeApi.systems.game.Game;
 import org.drappula.arcadeApi.systems.game.IGameManager;
 import org.drappula.arcadeApi.systems.game.IMatchManager;
 import org.drappula.arcadeApi.systems.game.IParticipant;
+import org.drappula.arcadeApi.systems.queue.IQueueManager;
 
 import javax.annotation.Nullable;
 import java.sql.SQLException;
@@ -18,6 +19,7 @@ public interface ArcadeAPI {
     void saveUserData(UserData profile) throws SQLException;
     IGameManager getGameManager();
     IMatchManager getMatchManager();
+    IQueueManager getQueueManager();
     @Nullable IParticipant getParticipant(Game game, Player player);
     @Deprecated @Nullable IParticipant getParticipant(Player player);
 }
