@@ -20,3 +20,5 @@ countdown-message-plural: "title:<time>;subtitle:<gray>seconds remaining;titleti
 match-started: "title:<green><b> Go!;titletime:300:1000:300"
 match-ended: "title:<green><b>Match ended!"
 participant-eliminated: "message:<red><b><participant></b></red> has been eliminated from the game!"
+bad-arguments:
+  unknown-game: "message:<red>Unknown game: <gray><id></gray>"

@@ -3,6 +3,8 @@ package org.drappula.arcadeCore.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -11,8 +13,11 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.drappula.arcadeApi.systems.game.Game;
 import org.drappula.arcadeCore.ArcadeCore;
 import org.drappula.arcadeCore.config.DataConfig;
+import org.drappula.arcadeCore.config.MessagesConfig;
 import org.drappula.arcadeCore.managers.game.GameManager;
 import org.drappula.arcadeCore.managers.queue.QueueManager;
+
+import java.util.concurrent.CompletableFuture;
 
 public class MainCommand {
     public static LiteralCommandNode<CommandSourceStack> get() {
@@ -22,9 +27,24 @@ public class MainCommand {
                 .then(Commands.literal("setspawn").executes(MainCommand::setSpawn))
                 .then(
                         Commands.literal("start")
-                                .then(Commands.argument("game", StringArgumentType.word()).executes(MainCommand::start))
+                                .requires(ctx -> ctx.getSender().hasPermission("arcade.force-start"))
+                                .then(Commands.argument("game", StringArgumentType.word())
+                                        .executes(MainCommand::start)
+                                        .suggests(MainCommand::suggestGames))
                 )
+                .then(
+                        Commands.literal("queue")
+                                .then(Commands.argument("game", StringArgumentType.word())
+                                                .executes(MainCommand::queue)
+                                                .suggests(MainCommand::suggestGames)))
                 .build();
+    }
+
+    private static CompletableFuture<Suggestions> suggestGames(CommandContext<CommandSourceStack> ctx, SuggestionsBuilder builder) {
+        for (Game game : GameManager.get().getGames().values()) {
+            builder.suggest(game.getId());
+        }
+        return builder.buildFuture();
     }
 
     private static int start(CommandContext<CommandSourceStack> ctx) {
@@ -38,6 +58,17 @@ public class MainCommand {
         if (!QueueManager.get().forceStart(game)) {
             ctx.getSource().getSender().sendRichMessage("<red>No players are queued for that game.");
         }
+        return Command.SINGLE_SUCCESS;
+    }
+    private static int queue(CommandContext<CommandSourceStack> ctx) {
+        String gameId = StringArgumentType.getString(ctx, "game");
+        Game game = GameManager.get().getGame(gameId);
+        if (game == null) {
+            ctx.getSource().getSender().sendRichMessage(MessagesConfig.get().getString("bad-arguments.unknown-game"),
+                    TagResolver.resolver(Placeholder.unparsed("id", gameId)));
+            return Command.SINGLE_SUCCESS;
+        }
+
         return Command.SINGLE_SUCCESS;
     }
 

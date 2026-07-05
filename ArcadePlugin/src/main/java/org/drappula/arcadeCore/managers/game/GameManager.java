@@ -32,8 +32,8 @@ public class GameManager implements IGameManager {
     }
 
     public void registerGame(Game game) {
-        if (game.getId().isEmpty() || game.getId().contains(" ")) throw new IllegalArgumentException("Tried to register game with invalid ID (" + game.getId() + ")");
-        games.put(game.getId(), game);
+        if (game.getId().isBlank() || game.getId().contains(" ")) throw new IllegalArgumentException("Tried to register game with invalid ID (" + game.getId() + ")");
+        games.put(game.getId().toLowerCase(), game);
     }
     public void unregisterGame(Game game) {
         this.unregisterGame(game.getId());
