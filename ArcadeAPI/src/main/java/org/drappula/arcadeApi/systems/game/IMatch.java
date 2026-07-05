@@ -1,9 +1,15 @@
 package org.drappula.arcadeApi.systems.game;
 
+import org.bukkit.entity.Player;
+
 import java.util.List;
 
 public interface IMatch {
-    public GameState getState();
-    public List<IParticipant> getParticipants();
-    public IGameType getGameType();
+    MatchState getState();
+    void setState(MatchState state);
+    List<IParticipant> getParticipants();
+    List<IParticipant> getEliminatedParticipants();
+    List<Player> getSpectatingPlayers();
+    Game getGame();
+    void end();
 }

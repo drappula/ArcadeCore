@@ -1,48 +1,71 @@
 package org.drappula.arcadeCore.managers.game;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import org.drappula.arcadeApi.systems.game.GameState;
-import org.drappula.arcadeApi.systems.game.IGameType;
-import org.drappula.arcadeApi.systems.game.IMatch;
+import org.drappula.arcadeApi.events.MatchEndEvent;
+import org.drappula.arcadeApi.events.MatchStartEvent;
+import org.drappula.arcadeApi.systems.game.*;
+import org.drappula.arcadeApi.systems.game.settings.EndFlyEnabled;
+import org.drappula.arcadeApi.systems.game.settings.EndGameMode;
+import org.drappula.arcadeApi.systems.game.settings.GameEndSettings;
+import org.drappula.arcadeCore.ArcadeCore;
+import org.drappula.arcadeCore.config.MainConfig;
+import org.drappula.arcadeCore.managers.game.tasks.MatchEndTask;
+import org.drappula.arcadeCore.managers.game.tasks.MatchStartTask;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MatchManager {
-    private static final Map<String, IGameType> gameTypes = new HashMap<>();
-    private static final List<IMatch> matches = new ArrayList<>();
-
-    public static void registerGameType(IGameType gameType) {
-        gameTypes.put(gameType.getId(), gameType);
+public class MatchManager implements IMatchManager {
+    private static MatchManager instance;
+    public static MatchManager get() {
+        if (instance == null) instance = new MatchManager();
+        return instance;
     }
 
-    public static IGameType getGameType(String id) {
-        return gameTypes.get(id);
+    public Map<String, List<IMatch>> getMatches() {
+        return GameManager.get().getMatches();
+    }
+    public List<IMatch> getMatchesForGame(String gameId) {
+        return GameManager.get().getMatches().get(gameId);
+    }
+    public List<IMatch> getMatchesForGame(Game game) {
+        return getMatchesForGame(game.getId());
     }
 
-    public static List<IMatch> getMatches() {
-        return matches;
-    }
-
-    public static Match startMatch(String gameTypeId, List<Player> players) {
-        IGameType gameType = gameTypes.get(gameTypeId);
-        if (gameType == null) {
-            throw new IllegalArgumentException("No game type registered with id " + gameTypeId);
+    public Match startMatch(Game game, List<Player> players) {
+        if (!game.isEnabled()) {
+            throw new IllegalStateException("Tried to start a match for a disabled game! (" + game.getId() + ")");
         }
-        Match match = new Match(gameType, players);
-        match.setState(GameState.STARTING);
-        matches.add(match);
-        gameType.onMatchStart(match);
-        match.setState(GameState.STARTED);
+        Match match = new Match(game, players);
+        GameManager.get().populateMatch(match);
+        MatchStartEvent startEvent = new MatchStartEvent(match);
+        startEvent.callEvent();
+        if (startEvent.isCancelled()) {
+            GameManager.get().depopulateMatch(match);
+            return null;
+        }
+        match.setState(MatchState.STARTING);
+        getMatches().get(match.getGame().getId()).add(match);
+        new MatchStartTask(match).runTaskTimer(ArcadeCore.get(), 0, 20);
         return match;
     }
 
-    public static void endMatch(Match match) {
-        match.setState(GameState.ENDING);
-        match.getGameType().onMatchEnd(match);
-        match.setState(GameState.ENDED);
-        matches.remove(match);
+    public void endMatch(IMatch match) {
+        match.setState(MatchState.ENDING);
+        new MatchEndTask(match).runTaskTimer(ArcadeCore.get(), 0, 20);
+        new MatchEndEvent(match).callEvent();
+    }
+
+    public void eliminateParticipant(IParticipant participant) {
+        participant.getMatch().getParticipants().remove(participant);
+        participant.getMatch().getEliminatedParticipants().add(participant);
+        participant.getMatch().getSpectatingPlayers().add(participant.getPlayer());
+        GameManager.get().getParticipants().get(participant.getMatch().getGame().getId()).remove(participant);
+        GameEndSettings settings = participant.getMatch().getGame().getGameEndSettings();
+        GameMode defaultGameMode = GameMode.valueOf(MainConfig.get().getString("match.end.gamemode"));
+        boolean defaultFlyEnabled = MainConfig.get().getBoolean("match.end.fly-enabled");
+        participant.getPlayer().setGameMode(settings.getGameMode() == EndGameMode.DEFAULT ? defaultGameMode : settings.getGameMode().getGameMode());
+        participant.getPlayer().setFlying(settings.isFlyEnabled() == EndFlyEnabled.DEFAULT ? defaultFlyEnabled : (settings.isFlyEnabled() == EndFlyEnabled.TRUE));
     }
 }

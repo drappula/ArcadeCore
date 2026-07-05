@@ -8,7 +8,7 @@ import org.drappula.arcadeCore.managers.UserDataManager;
 
 public class Profile implements IProfile {
     private final Player player;
-    private IMatch game;
+    private IMatch match;
 
     public Profile(Player player) {
         this.player = player;
@@ -25,7 +25,12 @@ public class Profile implements IProfile {
     }
 
     @Override
-    public IMatch getGame() {
-        return game;
+    public IMatch getMatch() {
+        return match;
+    }
+
+    @Override
+    public void setMatch(IMatch match) {
+        this.match = match;
     }
 }

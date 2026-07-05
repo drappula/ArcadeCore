@@ -8,6 +8,7 @@ import org.drappula.arcadeCore.api.ArcadeAPIImpl;
 import org.drappula.arcadeCore.commands.MainCommand;
 import org.drappula.arcadeCore.config.DataConfig;
 import org.drappula.arcadeCore.config.MainConfig;
+import org.drappula.arcadeCore.config.MessagesConfig;
 import org.drappula.arcadeCore.database.Database;
 
 import java.sql.SQLException;
@@ -21,20 +22,25 @@ public final class ArcadeCore extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        setupConfig();
+        connectDatabase();
+        registerCommands();
+        registerAPI();
+    }
+    private void setupConfig() {
         DataConfig.setup();
         MainConfig.setup();
-
+        MessagesConfig.setup();
+    }
+    private void connectDatabase() {
         try {
             Database.connect();
         } catch (SQLException e) {
             getLogger().severe("Failed to connect to database:");
             throw new RuntimeException(e);
         }
-
-        registerCommands();
-        registerAPI();
     }
-
     private void registerCommands() {
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> commands.registrar().register(MainCommand.get()));
     }

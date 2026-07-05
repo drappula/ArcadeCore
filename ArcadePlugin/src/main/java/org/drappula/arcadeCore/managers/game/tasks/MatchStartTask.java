@@ -1,0 +1,33 @@
+package org.drappula.arcadeCore.managers.game.tasks;
+
+import org.bukkit.scheduler.BukkitRunnable;
+import org.drappula.arcadeApi.systems.game.MatchState;
+import org.drappula.arcadeApi.systems.game.IMatch;
+import org.drappula.arcadeApi.systems.game.IParticipant;
+import org.drappula.arcadeCore.config.MainConfig;
+import org.drappula.arcadeCore.config.MessagesConfig;
+import org.drappula.arcadeCore.util.MessageUtil;
+
+public class MatchStartTask extends BukkitRunnable {
+    private float timeLeft;
+    private final IMatch match;
+    public MatchStartTask(IMatch match) {
+        timeLeft = MainConfig.get().getOptionalFloat("match.start-countdown").orElse(10f);
+        this.match = match;
+    }
+    @Override
+    public void run() {
+        if (timeLeft == 0) {
+            match.setState(MatchState.STARTED);
+            for (IParticipant participant : match.getParticipants()) {
+                MessageUtil.sendMessage(participant.getPlayer(), MessagesConfig.get().getString(""));
+            }
+            this.cancel();
+            return;
+        }
+        for (IParticipant participant : match.getParticipants()) {
+            MessageUtil.sendMessage(participant.getPlayer(), MessagesConfig.get().getString("countdown-message-" + (timeLeft == 1 ? "singular" : "plural")));
+        }
+        timeLeft--;
+    }
+}

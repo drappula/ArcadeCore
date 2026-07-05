@@ -3,3 +3,13 @@ lobby:
   # Whether the player should be teleported to spawn on join or not
   teleport-spawn: true
   gamemode: ADVENTURE
+  fly-enabled: true
+
+match:
+  start-countdown: 10.0 # in seconds
+  # these settings will be the same for when a participant is eliminated from the game
+  end:
+    gamemode: SPECTATOR
+    fly-enabled: true
+
+version: 1

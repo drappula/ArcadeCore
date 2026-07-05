@@ -7,5 +7,6 @@ import org.drappula.arcadeApi.systems.game.IMatch;
 public interface IProfile {
     UserData getUserData();
     Player getPlayer();
-    IMatch getGame();
+    IMatch getMatch();
+    void setMatch(IMatch match);
 }

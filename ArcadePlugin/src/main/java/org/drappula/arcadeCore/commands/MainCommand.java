@@ -1,6 +1,7 @@
 package org.drappula.arcadeCore.commands;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -16,7 +17,18 @@ public class MainCommand {
                 .executes(MainCommand::info)
                 .then(Commands.literal("reload").executes(MainCommand::reload))
                 .then(Commands.literal("setspawn").executes(MainCommand::setSpawn))
+                .then(
+                        Commands.literal("start")
+                                .then(Commands.argument("game", StringArgumentType.word()))
+                                .executes(MainCommand::start)
+                )
                 .build();
+    }
+
+    private static int start(CommandContext<CommandSourceStack> ctx) {
+        String gameName = StringArgumentType.getString(ctx, "game");
+        // TODO
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int info(CommandContext<CommandSourceStack> ctx) {
