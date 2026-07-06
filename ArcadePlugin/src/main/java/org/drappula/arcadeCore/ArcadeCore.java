@@ -12,6 +12,7 @@ import org.drappula.arcadeCore.config.MessagesConfig;
 import org.drappula.arcadeCore.database.Database;
 import org.drappula.arcadeCore.listeners.LobbyListener;
 import org.drappula.arcadeCore.managers.game.GameManager;
+import org.drappula.arcadeCore.managers.map.MapManager;
 
 import java.sql.SQLException;
 
@@ -27,6 +28,7 @@ public final class ArcadeCore extends JavaPlugin {
 
         setupConfig();
         connectDatabase();
+        MapManager.get().load();
         registerCommands();
         registerListeners();
         registerAPI();
@@ -58,6 +60,7 @@ public final class ArcadeCore extends JavaPlugin {
     @Override
     public void onDisable() {
         GameManager.get().reload();
+        MapManager.get().releaseAll();
         try {
             Database.disconnect();
         } catch (SQLException e) {

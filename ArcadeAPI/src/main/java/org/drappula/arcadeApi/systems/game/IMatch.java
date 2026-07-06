@@ -1,7 +1,9 @@
 package org.drappula.arcadeApi.systems.game;
 
 import org.bukkit.entity.Player;
+import org.drappula.arcadeApi.systems.map.IArcadeMap;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public interface IMatch {
@@ -11,5 +13,6 @@ public interface IMatch {
     List<IParticipant> getEliminatedParticipants();
     List<Player> getSpectatingPlayers();
     Game getGame();
+    @Nullable IArcadeMap getMap();
     void end();
 }

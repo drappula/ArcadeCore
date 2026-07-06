@@ -33,6 +33,23 @@ public class Database {
                     "PRIMARY KEY (uuid, game_id), " +
                     "FOREIGN KEY (uuid) REFERENCES user_profiles(uuid) ON DELETE CASCADE, " +
                     "FOREIGN KEY (game_id) REFERENCES games(game_id) ON DELETE CASCADE)");
+            stmt.execute("CREATE TABLE IF NOT EXISTS maps (" +
+                    "map_id TEXT PRIMARY KEY, " +
+                    "game_id TEXT NOT NULL, " +
+                    "display_name TEXT NOT NULL, " +
+                    "world TEXT NOT NULL, " +
+                    "enabled INTEGER NOT NULL DEFAULT 1, " +
+                    "in_use INTEGER NOT NULL DEFAULT 0)");
+            stmt.execute("CREATE TABLE IF NOT EXISTS map_spawns (" +
+                    "map_id TEXT NOT NULL, " +
+                    "spawn_index INTEGER NOT NULL, " +
+                    "x REAL NOT NULL, " +
+                    "y REAL NOT NULL, " +
+                    "z REAL NOT NULL, " +
+                    "yaw REAL NOT NULL, " +
+                    "pitch REAL NOT NULL, " +
+                    "PRIMARY KEY (map_id, spawn_index), " +
+                    "FOREIGN KEY (map_id) REFERENCES maps(map_id) ON DELETE CASCADE)");
         }
     }
 

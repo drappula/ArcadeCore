@@ -22,3 +22,6 @@ match-ended: "title:<green><b>Match ended!"
 participant-eliminated: "message:<red><b><participant></b></red> has been eliminated from the game!"
 bad-arguments:
   unknown-game: "message:<red>Unknown game: <gray><id></gray>"
+map-created: "message:<green>Created map <gray><id></gray> for game <gray><game></gray>."
+map-not-found: "message:<red>Unknown map: <gray><id></gray>"
+map-unavailable: "message:<red>No map is available right now, please try again shortly."

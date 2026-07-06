@@ -8,6 +8,7 @@ import org.drappula.arcadeApi.systems.game.IParticipant;
 import org.drappula.arcadeCore.config.MessagesConfig;
 import org.drappula.arcadeCore.managers.game.GameManager;
 import org.drappula.arcadeCore.managers.game.MatchManager;
+import org.drappula.arcadeCore.managers.map.MapManager;
 import org.drappula.arcadeCore.util.MessageUtil;
 import org.drappula.arcadeCore.util.PlayerUtil;
 
@@ -22,6 +23,7 @@ public class MatchEndTask extends BukkitRunnable {
         if (time == 0) {
             match.setState(MatchState.ENDED);
             GameManager.get().depopulateMatch(match);
+            MapManager.get().releaseMap(match.getMap());
             for (Player player : match.getSpectatingPlayers()) {
                 MessageUtil.sendMessage(player, MessagesConfig.get().getString("match-ended"));
                 PlayerUtil.sendToLobby(player);

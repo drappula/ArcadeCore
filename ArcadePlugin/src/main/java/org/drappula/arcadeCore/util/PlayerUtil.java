@@ -14,9 +14,18 @@ public class PlayerUtil {
     public static void sendToLobby(Player player) {
         Optional<Location> spawnLocation = DataConfig.getSpawnLocation();
         if (MainConfig.get().getBoolean("lobby.teleport-spawn")) spawnLocation.ifPresent(player::teleport);
+        resetPlayerState(player, GameMode.valueOf(MainConfig.get().getString("lobby.gamemode")), MainConfig.get().getBoolean("lobby.fly-enabled"));
+    }
+
+    public static void teleportToMatch(Player player, Location location) {
+        player.teleport(location);
+        resetPlayerState(player, GameMode.SURVIVAL, false);
+    }
+
+    private static void resetPlayerState(Player player, GameMode gameMode, boolean flying) {
         AttributeInstance maxHealth = player.getAttribute(Attribute.MAX_HEALTH);
         player.setHealth(maxHealth == null ? 20 : maxHealth.getValue());
-        player.setGameMode(GameMode.valueOf(MainConfig.get().getString("lobby.gamemode")));
-        player.setFlying(MainConfig.get().getBoolean("lobby.fly-enabled"));
+        player.setGameMode(gameMode);
+        player.setFlying(flying);
     }
 }

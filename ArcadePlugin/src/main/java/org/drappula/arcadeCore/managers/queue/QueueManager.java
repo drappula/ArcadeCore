@@ -4,8 +4,10 @@ import org.bukkit.entity.Player;
 import org.drappula.arcadeApi.events.QueueEnterEvent;
 import org.drappula.arcadeApi.systems.game.Game;
 import org.drappula.arcadeApi.systems.queue.IQueueManager;
+import org.drappula.arcadeCore.config.MessagesConfig;
 import org.drappula.arcadeCore.managers.game.GameManager;
 import org.drappula.arcadeCore.managers.game.MatchManager;
+import org.drappula.arcadeCore.util.MessageUtil;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -34,7 +36,11 @@ public class QueueManager implements IQueueManager {
         if (queue.size() >= game.getPlayersRequired()) {
             List<Player> players = new ArrayList<>(queue.subList(0, game.getPlayersRequired()));
             queue.removeAll(players);
-            MatchManager.get().startMatch(game, players);
+            if (MatchManager.get().startMatch(game, players) == null) {
+                for (Player queuedPlayer : players) {
+                    MessageUtil.sendMessage(queuedPlayer, MessagesConfig.get().getString("map-unavailable"));
+                }
+            }
         }
         return true;
     }
@@ -68,7 +74,11 @@ public class QueueManager implements IQueueManager {
         if (queue == null || queue.isEmpty()) return false;
         List<Player> players = new ArrayList<>(queue);
         queue.clear();
-        MatchManager.get().startMatch(game, players);
+        if (MatchManager.get().startMatch(game, players) == null) {
+            for (Player queuedPlayer : players) {
+                MessageUtil.sendMessage(queuedPlayer, MessagesConfig.get().getString("map-unavailable"));
+            }
+        }
         return true;
     }
 }

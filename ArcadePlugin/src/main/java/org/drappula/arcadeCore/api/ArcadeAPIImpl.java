@@ -6,10 +6,12 @@ import org.drappula.arcadeApi.database.UserData;
 import org.drappula.arcadeApi.systems.game.Game;
 import org.drappula.arcadeApi.systems.game.IMatchManager;
 import org.drappula.arcadeApi.systems.game.IParticipant;
+import org.drappula.arcadeApi.systems.map.IMapManager;
 import org.drappula.arcadeApi.systems.queue.IQueueManager;
 import org.drappula.arcadeCore.managers.UserDataManager;
 import org.drappula.arcadeCore.managers.game.GameManager;
 import org.drappula.arcadeCore.managers.game.MatchManager;
+import org.drappula.arcadeCore.managers.map.MapManager;
 import org.drappula.arcadeCore.managers.queue.QueueManager;
 
 import javax.annotation.Nullable;
@@ -45,6 +47,11 @@ public class ArcadeAPIImpl implements ArcadeAPI {
     @Override
     public IQueueManager getQueueManager() {
         return QueueManager.get();
+    }
+
+    @Override
+    public IMapManager getMapManager() {
+        return MapManager.get();
     }
 
     @Override

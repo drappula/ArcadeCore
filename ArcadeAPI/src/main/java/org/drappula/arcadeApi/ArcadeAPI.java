@@ -6,6 +6,7 @@ import org.drappula.arcadeApi.systems.game.Game;
 import org.drappula.arcadeApi.systems.game.IGameManager;
 import org.drappula.arcadeApi.systems.game.IMatchManager;
 import org.drappula.arcadeApi.systems.game.IParticipant;
+import org.drappula.arcadeApi.systems.map.IMapManager;
 import org.drappula.arcadeApi.systems.queue.IQueueManager;
 
 import javax.annotation.Nullable;
@@ -20,6 +21,7 @@ public interface ArcadeAPI {
     IGameManager getGameManager();
     IMatchManager getMatchManager();
     IQueueManager getQueueManager();
+    IMapManager getMapManager();
     @Nullable IParticipant getParticipant(Game game, Player player);
     @Deprecated @Nullable IParticipant getParticipant(Player player);
 }
