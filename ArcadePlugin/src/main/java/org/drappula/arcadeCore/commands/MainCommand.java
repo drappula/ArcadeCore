@@ -225,6 +225,7 @@ public class MainCommand {
     private static int reload(CommandContext<CommandSourceStack> ctx) {
         try {
             DataConfig.get().reload();
+            ctx.getSource().getSender().sendRichMessage("<green>Reloaded the plugin configuration.");
         } catch (Exception e) {
             ctx.getSource().getSender().sendRichMessage("<red>Failed to reload the plugin! See the console for more details.");
             throw new RuntimeException(e);
@@ -235,6 +236,7 @@ public class MainCommand {
     private static int setSpawn(CommandContext<CommandSourceStack> ctx) {
         try {
             DataConfig.setSpawnLocation(ctx.getSource().getLocation());
+            ctx.getSource().getSender().sendRichMessage("<green>Spawn location updated.");
         } catch (Exception e) {
             ctx.getSource().getSender().sendRichMessage("<red>An error occurred while trying to save spawn location. See the console for more details.");
             ArcadeCore.get().getSLF4JLogger().error("An error occurred while trying to save spawn location", e);
