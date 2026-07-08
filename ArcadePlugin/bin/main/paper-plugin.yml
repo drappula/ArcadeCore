@@ -1,0 +1,10 @@
+name: ArcadeCore
+description: $description
+version: '${version}'
+
+main: org.drappula.arcadeCore.ArcadeCore
+loader: org.drappula.arcadeCore.ArcadeCoreLoader
+api-version: '1.21.11'
+load: POSTWORLD
+
+authors: [ drappula, TejasLamba2006 ]
