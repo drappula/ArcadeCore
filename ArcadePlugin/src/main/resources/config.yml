@@ -12,4 +12,8 @@ match:
     gamemode: SPECTATOR
     fly-enabled: true
 
-version: 1
+queue:
+  # how long to wait for more players once a game's minimum player count is met, before starting anyway
+  start-countdown: 20.0 # in seconds
+
+version: 2

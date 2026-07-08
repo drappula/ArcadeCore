@@ -45,12 +45,15 @@ public class MatchManager implements IMatchManager {
         if (!game.isEnabled()) {
             throw new IllegalStateException("Tried to start a match for a disabled game! (" + game.getId() + ")");
         }
-        Optional<IArcadeMap> acquiredMap = MapManager.get().acquireMap(game.getId());
-        if (acquiredMap.isEmpty()) {
-            ArcadeCore.get().getSLF4JLogger().warn("No available map to start a match for game {}", game.getId());
-            return null;
+        IArcadeMap map = game.createArena(players);
+        if (map == null) {
+            Optional<IArcadeMap> acquiredMap = MapManager.get().acquireMap(game.getId());
+            if (acquiredMap.isEmpty()) {
+                ArcadeCore.get().getSLF4JLogger().warn("No available map to start a match for game {}", game.getId());
+                return null;
+            }
+            map = acquiredMap.get();
         }
-        IArcadeMap map = acquiredMap.get();
         if (map.getSpawnPoints().size() < players.size()) {
             ArcadeCore.get().getSLF4JLogger().warn("Map {} does not have enough spawn points for game {} ({} needed, {} available)",
                     map.getId(), game.getId(), players.size(), map.getSpawnPoints().size());
