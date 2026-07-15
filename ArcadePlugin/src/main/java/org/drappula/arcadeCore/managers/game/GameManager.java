@@ -39,10 +39,11 @@ public class GameManager implements IGameManager {
         this.unregisterGame(game.getId());
     }
     public Game getGame(String id) {
-        return games.get(id);
+        // registerGame lowercases the key, so lookups must too
+        return games.get(id.toLowerCase());
     }
     public void unregisterGame(String id) {
-        games.remove(id);
+        games.remove(id.toLowerCase());
     }
     public void populateMatch(IMatch match) {
         String gameId = match.getGame().getId();

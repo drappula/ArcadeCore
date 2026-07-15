@@ -16,6 +16,7 @@ import org.drappula.arcadeCore.managers.queue.QueueManager;
 
 import javax.annotation.Nullable;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,7 +57,7 @@ public class ArcadeAPIImpl implements ArcadeAPI {
 
     @Override
     public IParticipant getParticipant(Game game, Player player) {
-        for (IParticipant participant : GameManager.get().getParticipants().get(game.getId())) {
+        for (IParticipant participant : GameManager.get().getParticipants().getOrDefault(game.getId(), List.of())) {
             if (participant.getPlayer() == player) return participant;
         }
         return null;
@@ -64,7 +65,7 @@ public class ArcadeAPIImpl implements ArcadeAPI {
     @Override @Deprecated @Nullable
     public IParticipant getParticipant(Player player) {
         for (String gameId : GameManager.get().getGames().keySet()) {
-            for (IParticipant participant : GameManager.get().getParticipants().get(gameId)) {
+            for (IParticipant participant : GameManager.get().getParticipants().getOrDefault(gameId, List.of())) {
                 if (participant.getPlayer() == player) return participant;
             }
         }

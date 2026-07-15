@@ -12,6 +12,8 @@ import org.drappula.arcadeCore.managers.map.MapManager;
 import org.drappula.arcadeCore.util.MessageUtil;
 import org.drappula.arcadeCore.util.PlayerUtil;
 
+import java.util.List;
+
 public class MatchEndTask extends BukkitRunnable {
     private int time = 5;
     private final IMatch match;
@@ -32,7 +34,8 @@ public class MatchEndTask extends BukkitRunnable {
             return;
         }
         if (time == 5) {
-            for (IParticipant participant : match.getParticipants()) {
+            // Copy the list: eliminateParticipant removes from match.getParticipants() while we iterate
+            for (IParticipant participant : List.copyOf(match.getParticipants())) {
                 MatchManager.get().eliminateParticipant(participant);
             }
         }

@@ -40,6 +40,11 @@ public class Participant implements IParticipant {
         return eliminated;
     }
 
+    /** Marks this participant eliminated without re-running elimination logic (used by {@link MatchManager}). */
+    void setEliminated(boolean eliminated) {
+        this.eliminated = eliminated;
+    }
+
     @Override
     public Player getPlayer() {
         return player;
@@ -47,8 +52,9 @@ public class Participant implements IParticipant {
 
     @Override
     public void eliminate() {
-        if (getMatch().getState() == MatchState.ENDING || getMatch().getState() == MatchState.ENDED)
-            throw new IllegalStateException("Tried to eliminate player when match was ending/ended.");
+        // A death/quit can land in the window where the match is already wrapping up — just ignore it
+        if (eliminated || getMatch().getState() == MatchState.ENDING || getMatch().getState() == MatchState.ENDED)
+            return;
         ParticipantEliminateEvent event = new ParticipantEliminateEvent(this);
         event.callEvent();
         if (event.isCancelled()) return;

@@ -86,6 +86,7 @@ public class MatchManager implements IMatchManager {
     }
 
     public void eliminateParticipant(IParticipant participant) {
+        if (participant instanceof Participant impl) impl.setEliminated(true);
         participant.getMatch().getParticipants().remove(participant);
         participant.getMatch().getEliminatedParticipants().add(participant);
         participant.getMatch().getSpectatingPlayers().add(participant.getPlayer());

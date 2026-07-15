@@ -18,7 +18,7 @@ public class MatchStartTask extends BukkitRunnable {
     }
     @Override
     public void run() {
-        if (timeLeft == 0) {
+        if (timeLeft <= 0) {
             match.setState(MatchState.STARTED);
             for (IParticipant participant : match.getParticipants()) {
                 MessageUtil.sendMessage(participant.getPlayer(), MessagesConfig.get().getString("match-started"));
